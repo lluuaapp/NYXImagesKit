@@ -12,9 +12,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
 
-@implementation UIImage (NYX_Rotating)
+@implementation NYXImage (NYX_Rotating)
 
--(UIImage*)rotateInRadians:(CGFloat)radians flipOverHorizontalAxis:(BOOL)doHorizontalFlip verticalAxis:(BOOL)doVerticalFlip
+-(NYXImage*)rotateInRadians:(CGFloat)radians flipOverHorizontalAxis:(BOOL)doHorizontalFlip verticalAxis:(BOOL)doVerticalFlip
 {
 	/// Create an ARGB bitmap context
 	const size_t width = (size_t)CGImageGetWidth(self.CGImage);
@@ -43,7 +43,7 @@
 
 	/// Create an image object from the context
 	CGImageRef resultImageRef = CGBitmapContextCreateImage(bmContext);
-	UIImage* resultImage = [UIImage imageWithCGImage:resultImageRef scale:self.scale orientation:self.imageOrientation];
+	NYXImage* resultImage = [NYXImage imageWithCGImage:resultImageRef scale:self.scale orientation:self.imageOrientation];
 
 	/// Cleanup
 	CGImageRelease(resultImageRef);
@@ -52,27 +52,27 @@
 	return resultImage;
 }
 
--(UIImage*)rotateInRadians:(float)radians
+-(NYXImage*)rotateInRadians:(float)radians
 {
   return [self rotateInRadians:radians flipOverHorizontalAxis:NO verticalAxis:NO];
 }
 
--(UIImage*)rotateInDegrees:(float)degrees
+-(NYXImage*)rotateInDegrees:(float)degrees
 {
 	return [self rotateInRadians:(float)NYX_DEGREES_TO_RADIANS(degrees)];
 }
 
--(UIImage*)verticalFlip
+-(NYXImage*)verticalFlip
 {
 	return [self rotateInRadians:0. flipOverHorizontalAxis:NO verticalAxis:YES];
 }
 
--(UIImage*)horizontalFlip
+-(NYXImage*)horizontalFlip
 {
   return [self rotateInRadians:0. flipOverHorizontalAxis:YES verticalAxis:NO];
 }
 
--(UIImage*)rotateImagePixelsInRadians:(float)radians
+-(NYXImage*)rotateImagePixelsInRadians:(float)radians
 {
 	/// Create an ARGB bitmap context
 	const size_t width = (size_t)(self.size.width * self.scale);
@@ -99,7 +99,7 @@
 	vImageRotate_ARGB8888(&src, &dest, NULL, radians, bgColor, kvImageBackgroundColorFill);
 
 	CGImageRef rotatedImageRef = CGBitmapContextCreateImage(bmContext);
-	UIImage* rotated = [UIImage imageWithCGImage:rotatedImageRef scale:self.scale orientation:self.imageOrientation];
+	NYXImage* rotated = [NYXImage imageWithCGImage:rotatedImageRef scale:self.scale orientation:self.imageOrientation];
 
 	/// Cleanup
 	CGImageRelease(rotatedImageRef);
@@ -108,7 +108,7 @@
 	return rotated;
 }
 
--(UIImage*)rotateImagePixelsInDegrees:(float)degrees
+-(NYXImage*)rotateImagePixelsInDegrees:(float)degrees
 {
 	return [self rotateImagePixelsInRadians:(float)NYX_DEGREES_TO_RADIANS(degrees)];
 }

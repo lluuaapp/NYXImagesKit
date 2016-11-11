@@ -11,6 +11,10 @@
 
 #import "NYXImagesHelper.h"
 
+#if ! TARGET_OS_IPHONE
+#import <Cocoa/Cocoa.h>
+#import <QuartzCore/QuartzCore.h>
+#endif
 
 static CIContext* __ciContext = nil;
 static CGColorSpaceRef __rgbColorSpace = NULL;
@@ -97,3 +101,50 @@ BOOL NYXImageHasAlpha(CGImageRef imageRef)
 
 	return hasAlpha;
 }
+
+#if ! TARGET_OS_IPHONE
+
+void UIGraphicsPushContext(CGContextRef inContextRef)
+{
+	[NSGraphicsContext saveGraphicsState];
+}
+
+void UIGraphicsPopContext()
+{
+	[NSGraphicsContext restoreGraphicsState];
+}
+
+@implementation NSImage (NYXImagesHelper)
+
+- (CGImageRef) CGImage;
+{
+    return [self CGImageForProposedRect:NULL context:[[NSGraphicsContext currentContext] graphicsPort] hints:nil];
+}
+
+- (CGFloat) scale;
+{
+    return 1;
+}
+
+- (UIImageOrientation)imageOrientation;
+{
+    return UIImageOrientationUp;
+}
+
+- (void) drawInRect:(CGRect) inRect
+{
+
+}
+
++ (NSImage*) imageWithCGImage:(CGImageRef)inCGImage;
+{
+    return [[NSImage alloc] initWithCGImage:inCGImage size:NSZeroSize];
+}
+
++ (NSImage*) imageWithCGImage:(CGImageRef)inCGImage scale:(CGFloat)inScale orientation:(UIImageOrientation)inOrientation;
+{
+    return [NSImage imageWithCGImage:inCGImage];
+}
+@end
+
+#endif

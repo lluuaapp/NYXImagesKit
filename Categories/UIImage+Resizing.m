@@ -11,9 +11,9 @@
 #import "UIImage+Resizing.h"
 
 
-@implementation UIImage (NYX_Resizing)
+@implementation NYXImage (NYX_Resizing)
 
--(UIImage*)cropToSize:(CGSize)newSize usingMode:(NYXCropMode)cropMode
+-(NYXImage*)cropToSize:(CGSize)newSize usingMode:(NYXCropMode)cropMode
 {
 	const CGSize size = self.size;
 	CGFloat x, y;
@@ -74,7 +74,7 @@
 
 	/// Create the cropped image
 	CGImageRef croppedImageRef = CGImageCreateWithImageInRect(self.CGImage, cropRect);
-	UIImage* cropped = [UIImage imageWithCGImage:croppedImageRef scale:self.scale orientation:self.imageOrientation];
+	NYXImage* cropped = [NYXImage imageWithCGImage:croppedImageRef scale:self.scale orientation:self.imageOrientation];
 
 	/// Cleanup
 	CGImageRelease(croppedImageRef);
@@ -83,18 +83,18 @@
 }
 
 /* Convenience method to crop the image from the top left corner */
--(UIImage*)cropToSize:(CGSize)newSize
+-(NYXImage*)cropToSize:(CGSize)newSize
 {
 	return [self cropToSize:newSize usingMode:NYXCropModeTopLeft];
 }
 
--(UIImage*)scaleByFactor:(float)scaleFactor
+-(NYXImage*)scaleByFactor:(float)scaleFactor
 {
 	CGSize scaledSize = CGSizeMake(self.size.width * scaleFactor, self.size.height * scaleFactor);
 	return [self scaleToFillSize:scaledSize];
 }
 
--(UIImage*)scaleToSize:(CGSize)newSize usingMode:(NYXResizeMode)resizeMode
+-(NYXImage*)scaleToSize:(CGSize)newSize usingMode:(NYXResizeMode)resizeMode
 {
 	switch (resizeMode)
 	{
@@ -108,12 +108,12 @@
 }
 
 /* Convenience method to scale the image using the NYXResizeModeScaleToFill mode */
--(UIImage*)scaleToSize:(CGSize)newSize
+-(NYXImage*)scaleToSize:(CGSize)newSize
 {
 	return [self scaleToFillSize:newSize];
 }
 
--(UIImage*)scaleToFillSize:(CGSize)newSize
+-(NYXImage*)scaleToFillSize:(CGSize)newSize
 {
 	size_t destWidth = (size_t)(newSize.width * self.scale);
 	size_t destHeight = (size_t)(newSize.height * self.scale);
@@ -145,7 +145,7 @@
 
 	/// Create an image object from the context
 	CGImageRef scaledImageRef = CGBitmapContextCreateImage(bmContext);
-	UIImage* scaled = [UIImage imageWithCGImage:scaledImageRef scale:self.scale orientation:self.imageOrientation];
+	NYXImage* scaled = [NYXImage imageWithCGImage:scaledImageRef scale:self.scale orientation:self.imageOrientation];
 
 	/// Cleanup
 	CGImageRelease(scaledImageRef);
@@ -154,7 +154,7 @@
 	return scaled;
 }
 
--(UIImage*)scaleToFitSize:(CGSize)newSize
+-(NYXImage*)scaleToFitSize:(CGSize)newSize
 {
 	/// Keep aspect ratio
 	size_t destWidth, destHeight;
@@ -181,7 +181,7 @@
 	return [self scaleToFillSize:CGSizeMake(destWidth, destHeight)];
 }
 
--(UIImage*)scaleToCoverSize:(CGSize)newSize
+-(NYXImage*)scaleToCoverSize:(CGSize)newSize
 {
 	size_t destWidth, destHeight;
 	CGFloat widthRatio = newSize.width / self.size.width;

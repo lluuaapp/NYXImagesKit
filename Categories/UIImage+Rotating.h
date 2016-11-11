@@ -11,18 +11,18 @@
 #import "NYXImagesHelper.h"
 
 
-@interface UIImage (NYX_Rotating)
+@interface NYXImage (NYX_Rotating)
 
--(UIImage*)rotateInRadians:(float)radians;
+-(NYXImage*)rotateInRadians:(float)radians;
 
--(UIImage*)rotateInDegrees:(float)degrees;
+-(NYXImage*)rotateInDegrees:(float)degrees;
 
--(UIImage*)rotateImagePixelsInRadians:(float)radians;
+-(NYXImage*)rotateImagePixelsInRadians:(float)radians;
 
--(UIImage*)rotateImagePixelsInDegrees:(float)degrees;
+-(NYXImage*)rotateImagePixelsInDegrees:(float)degrees;
 
--(UIImage*)verticalFlip;
+-(NYXImage*)verticalFlip;
 
--(UIImage*)horizontalFlip;
+-(NYXImage*)horizontalFlip;
 
 @end

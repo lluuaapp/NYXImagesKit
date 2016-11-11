@@ -8,6 +8,11 @@
 //  www.cocoaintheshell.com
 //
 
+#if TARGET_OS_IPHONE
+#define NYXImage UIImage
+#else
+#define NYXImage NSImage
+#endif
 
 /* Number of components for an opaque grey colorSpace = 3 */
 #define kNyxNumberOfComponentsPerGreyPixel 3
@@ -46,3 +51,34 @@ CIContext* NYXGetCIContext(void);
 CGColorSpaceRef NYXGetRGBColorSpace(void);
 void NYXImagesKitRelease(void);
 BOOL NYXImageHasAlpha(CGImageRef imageRef);
+
+
+#if ! TARGET_OS_IPHONE
+
+typedef enum {
+    UIImageOrientationUp,            // default orientation
+    UIImageOrientationDown,          // 180 deg rotation
+    UIImageOrientationLeft,          // 90 deg CCW
+    UIImageOrientationRight,         // 90 deg CW
+    UIImageOrientationUpMirrored,    // as above but image mirrored along other axis. horizontal flip
+    UIImageOrientationDownMirrored,  // horizontal flip
+    UIImageOrientationLeftMirrored,  // vertical flip
+    UIImageOrientationRightMirrored, // vertical flip
+} UIImageOrientation;
+
+void UIGraphicsPushContext(CGContextRef inContextRef);
+void UIGraphicsPopContext(void);
+
+@interface NSImage (NYXImagesHelper)
+
+- (CGImageRef) CGImage;
+- (CGFloat) scale;
+- (UIImageOrientation)imageOrientation;
+- (void) drawInRect:(CGRect) inRect;
++ (NSImage*) imageWithCGImage:(CGImageRef)inCGImage;
++ (NSImage*) imageWithCGImage:(CGImageRef)inCGImage scale:(CGFloat)inScale orientation:(UIImageOrientation)inOrientation;
+
+@end
+
+
+#endif
